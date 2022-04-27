@@ -1,42 +1,33 @@
 import './App.css'
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
+
+import { useSelector, useDispatch } from 'react-redux'
+import { SET_INCREMENT, SET_DECREMENT } from './redux/actions/counterAction'
+import { fetchPost } from './redux/actions/postAction'
 
 const App = () => {
-  // The first value is the current state ('count')
-  // the second value is the function to update 'count' state
-  // const [count, updateCount] = useState(() => {
-  //   return 0
-  // })
+  const counter = useSelector(state => state.counterReducer.counter)
+  const posts = useSelector((state) => {
+    return state.postReducer.posts
+  })
+  const dispatch = useDispatch()
 
-  // Calling useState multiple times
-  const [count, updateCount] = useState(0)
-  const [name, changeName] = useState('original name')
+  const firstPostTitle = posts.length > 0 ? posts[0].title : 'No posts'
 
-  const addToCount = () => {
-    updateCount(previousCount => previousCount + 1)
-    changeName('addition')
-  }
-
-  const subtractFromCount = () => {
-    updateCount(previousCount => previousCount - 1)
-    changeName('subtract')
-  }
+  useEffect(() => {
+    dispatch(fetchPost())
+  }, [])
 
   return (
     <div className='App'>
-      <button
-        style={{ marginRight: '10px' }}
-        onClick={addToCount}
-      >
-        +
-      </button>
-      <span>{count} {name}</span>
-      <button
-        style={{ marginLeft: '10px'}}
-        onClick={subtractFromCount}
-      >
-        -
-      </button>
+      <div className='counter'>
+        <h1>{counter}</h1>
+        <div>
+          <button onClick={(() => dispatch({ type: SET_INCREMENT }))}>ADD</button>
+          <button onClick={(() => dispatch({ type: SET_DECREMENT }))}>SUBTRACT</button>
+        </div>
+      </div>
+      <h1>{firstPostTitle}</h1>
     </div>
   )
 }
