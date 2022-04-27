@@ -1,25 +1,28 @@
 import './App.css'
 import React, { useState } from 'react'
 
-const App = () => {
+const AppVer2 = () => {
   // The first value is the current state ('count')
   // the second value is the function to update 'count' state
   // const [count, updateCount] = useState(() => {
   //   return 0
   // })
 
-  // Calling useState multiple times
-  const [count, updateCount] = useState(0)
-  const [name, changeName] = useState('original name')
+  // Sending an Object to useState
+  const [state, setState] = useState({ count: 0, actionName: 'nothing' })
+  const count = state.count
+  const actionName = state.actionName
 
   const addToCount = () => {
-    updateCount(previousCount => previousCount + 1)
-    changeName('addition')
+    setState(previousState => {
+      return {...previousState, count: previousState.count + 1, actionName: 'addition'}
+    })
   }
 
   const subtractFromCount = () => {
-    updateCount(previousCount => previousCount - 1)
-    changeName('subtract')
+    setState(previousState => {
+      return {...previousState, count: previousState.count - 1, actionName: 'subtract'}
+    })
   }
 
   return (
@@ -30,7 +33,7 @@ const App = () => {
       >
         +
       </button>
-      <span>{count} {name}</span>
+      <span>{count} {actionName}</span>
       <button
         style={{ marginLeft: '10px'}}
         onClick={subtractFromCount}
@@ -41,4 +44,4 @@ const App = () => {
   )
 }
 
-export default App;
+export default AppVer2;
